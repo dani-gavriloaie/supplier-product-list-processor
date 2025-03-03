@@ -10,6 +10,10 @@ if (empty($options['file']) || empty($options['unique-combinations'])) {
     die("Usage: php parser.php --file <file> --unique-combinations <output_file>\n");
 }
 
+if (isset($options['v'])) {
+    $start_time = microtime(true);
+}
+
 try {
     $productProcessor = new ProductProcessor();
     $productProcessor->process($options['file'], $options['unique-combinations']);
@@ -19,4 +23,5 @@ try {
 
 if (isset($options['v'])) {
     echo 'Peak Memory Usage: ' . (memory_get_peak_usage(true) / 1024 / 1024) . " MB\n";
+    echo 'Execution time: ' . round(microtime(true) - $start_time, 4) . ' seconds';
 }
