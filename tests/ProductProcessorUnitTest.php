@@ -28,9 +28,9 @@ class ProductProcessorUnitTest
         ];
         $file = fopen('test.csv', 'w');
 
-        fputcsv($file, $headers);
+        fputcsv($file, $headers, ',', '"', "\\");
         foreach($data as $item) {
-            fputcsv($file, $item);
+            fputcsv($file, $item, ',', '"', "\\");
         }
         fclose($file);
 
@@ -41,8 +41,8 @@ class ProductProcessorUnitTest
         // Assert
         $consoleOutput = ob_get_clean();
         $outputFile = fopen('output.csv', 'r');
-        $outputHeaders = fgetcsv($outputFile);
-        $outputData = fgetcsv($outputFile);
+        $outputHeaders = fgetcsv($outputFile, 0, ',', '"', "\\");
+        $outputData = fgetcsv($outputFile, 0, ',', '"', "\\");
         fclose($outputFile);
 
         assertEquals(
@@ -78,9 +78,9 @@ class ProductProcessorUnitTest
         ];
         $file = fopen('test.csv', 'w');
 
-        fputcsv($file, $headers);
+        fputcsv($file, $headers, ",", '"', "\\");
         foreach($data as $item) {
-            fputcsv($file, $item);
+            fputcsv($file, $item, ',', '"', "\\");
         }
         fclose($file);
 
