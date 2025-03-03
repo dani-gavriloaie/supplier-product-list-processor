@@ -2,8 +2,8 @@
 
 namespace DaniGavriloaie\SupplierProductListProcessor\Parsers;
 
+use DaniGavriloaie\SupplierProductListProcessor\Exceptions\RequiredFieldException;
 use DaniGavriloaie\SupplierProductListProcessor\Models\Product;
-use Exception;
 use Generator;
 
 class CSVParser implements FileParserInterface
@@ -21,7 +21,10 @@ class CSVParser implements FileParserInterface
 
     protected string $separator = ",";
 
-    /** @return Generator<Product> A generator that yields Product objects. */
+    /**
+     * @throws RequiredFieldException
+     * @return Generator<Product> A generator that yields Product objects.
+     */
     public function parse(string $filePath): Generator
     {
         $file = fopen($filePath, 'r');
@@ -32,12 +35,8 @@ class CSVParser implements FileParserInterface
         }, $headers);
 
         while ($row = fgetcsv($file, 0, $this->separator)) {
-            try {
-                $data = array_combine($mappedHeaders, $row);
-                yield Product::fromArray($data);
-            } catch (Exception $exception) {
-                // TODO handle invalid data
-            }
+            $data = array_combine($mappedHeaders, $row);
+            yield Product::fromArray($data);
         }
 
         fclose($file);
