@@ -8,28 +8,28 @@ class Product
 {
     public string $make;
     public string $model;
-    public ?string $colour;
-    public ?string $capacity;
-    public ?string $network;
-    public ?string $grade;
     public ?string $condition;
+    public ?string $grade;
+    public ?string $capacity;
+    public ?string $colour;
+    public ?string $network;
 
     public function __construct(
         string $make,
         string $model,
-        ?string $colour = null,
-        ?string $capacity = null,
-        ?string $network = null,
+        ?string $condition = null,
         ?string $grade = null,
-        ?string $condition = null
+        ?string $capacity = null,
+        ?string $colour = null,
+        ?string $network = null,
     ) {
         $this->make = $make;
         $this->model = $model;
-        $this->colour = $colour;
-        $this->capacity = $capacity;
-        $this->network = $network;
-        $this->grade = $grade;
         $this->condition = $condition;
+        $this->grade = $grade;
+        $this->capacity = $capacity;
+        $this->colour = $colour;
+        $this->network = $network;
     }
 
     public function toString(): string {
@@ -49,11 +49,11 @@ class Product
         return new self(
             make: $data['make'],
             model: $data['model'],
-            colour: $data['colour'],
-            capacity: $data['capacity'],
-            network: $data['network'],
+            condition: $data['condition'],
             grade: $data['grade'],
-            condition: $data['condition']
+            capacity: $data['capacity'],
+            colour: $data['colour'],
+            network: $data['network']
         );
     }
 }
