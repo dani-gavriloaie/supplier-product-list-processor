@@ -2,6 +2,7 @@
 
 namespace DaniGavriloaie\SupplierProductListProcessor\Parsers;
 
+use DaniGavriloaie\SupplierProductListProcessor\Enums\CSVColumnMapEnum;
 use DaniGavriloaie\SupplierProductListProcessor\Exceptions\RequiredFieldException;
 use DaniGavriloaie\SupplierProductListProcessor\Models\Product;
 use Generator;
@@ -16,7 +17,6 @@ class CSVParser implements FileParserInterface
         'gb_spec_name' => 'capacity',
         'colour_name' => 'colour',
         'network_name' => 'network'
-
     ];
 
     protected string $separator = ",";
@@ -31,7 +31,7 @@ class CSVParser implements FileParserInterface
         $headers = fgetcsv($file, 0, $this->separator);
 
         $mappedHeaders = array_map(function($header) {
-            return self::$columnMap[$header] ?? $header;
+            return CSVColumnMapEnum::getMappedColumn($header);
         }, $headers);
 
         while ($row = fgetcsv($file, 0, $this->separator)) {
