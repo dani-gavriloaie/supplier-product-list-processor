@@ -20,6 +20,8 @@ class CSVParser implements FileParserInterface
     ];
 
     protected string $separator = ",";
+    protected string $enclosure = '"';
+    protected string $escape = '\\';
 
     /**
      * @throws RequiredFieldException
@@ -28,13 +30,13 @@ class CSVParser implements FileParserInterface
     public function parse(string $filePath): Generator
     {
         $file = fopen($filePath, 'r');
-        $headers = fgetcsv($file, 0, $this->separator);
+        $headers = fgetcsv($file, 0, $this->separator, $this->enclosure, $this->escape);
 
         $mappedHeaders = array_map(function($header) {
             return CSVColumnMapEnum::getMappedColumn($header);
         }, $headers);
 
-        while ($row = fgetcsv($file, 0, $this->separator)) {
+        while ($row = fgetcsv($file, 0, $this->separator, $this->enclosure, $this->escape)) {
             $data = array_combine($mappedHeaders, $row);
             yield Product::fromArray($data);
         }

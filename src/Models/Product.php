@@ -36,6 +36,10 @@ class Product
         return json_encode(get_object_vars($this), JSON_PRETTY_PRINT);
     }
 
+    public function toArray(): array {
+        return get_object_vars($this);
+    }
+
     /** @throws RequiredFieldException */
     public static function fromArray(array $data): Product {
         if (empty($data['make']) || empty($data['model'])) {
