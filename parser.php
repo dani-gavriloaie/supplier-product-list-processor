@@ -1,5 +1,7 @@
 <?php
 
+use DaniGavriloaie\SupplierProductListProcessor\Factories\FileExporterFactory;
+use DaniGavriloaie\SupplierProductListProcessor\Factories\FileParserFactory;
 use DaniGavriloaie\SupplierProductListProcessor\Services\ProductProcessor;
 
 require 'vendor/autoload.php';
@@ -15,7 +17,10 @@ if (isset($options['v'])) {
 }
 
 try {
-    $productProcessor = new ProductProcessor();
+    $fileParser = FileParserFactory::createParser($options['file']);
+    $fileExporter = FileExporterFactory::createExporter($options['unique-combinations']);
+
+    $productProcessor = new ProductProcessor($fileParser, $fileExporter);
     $productProcessor->process($options['file'], $options['unique-combinations']);
 } catch (Exception $exception) {
     echo 'An error occurred: ' . $exception->getMessage();

@@ -2,21 +2,23 @@
 
 namespace DaniGavriloaie\SupplierProductListProcessor\Services;
 
-use DaniGavriloaie\SupplierProductListProcessor\Exceptions\RequiredFieldException;
-use DaniGavriloaie\SupplierProductListProcessor\Factories\FileExporterFactory;
-use DaniGavriloaie\SupplierProductListProcessor\Factories\FileParserFactory;
+use DaniGavriloaie\SupplierProductListProcessor\Exporters\FileExporterInterface;
 use DaniGavriloaie\SupplierProductListProcessor\Models\Product;
+use DaniGavriloaie\SupplierProductListProcessor\Parsers\FileParserInterface;
 
 class ProductProcessor
 {
-    /** @throws RequiredFieldException|\Exception */
+    public function __construct(
+        private readonly FileParserInterface $fileParser,
+        private readonly FileExporterInterface $fileExporter
+    ) {}
+
+    /** @throws \Exception */
     public function process(string $filePath, string $outputPath): void
     {
-        $fileParser = FileParserFactory::createParser($filePath);
-
         /** @var Product $product */
         $uniqueProducts = [];
-        foreach ($fileParser->parse($filePath) as $product) {
+        foreach ($this->fileParser->parse($filePath) as $product) {
             echo json_encode($product) . "\r\n";
 
             $hash = md5($product->toString());
@@ -31,7 +33,6 @@ class ProductProcessor
             }
         }
 
-        $fileExporter = FileExporterFactory::createExporter($outputPath);
-        $fileExporter->export($outputPath, $uniqueProducts);
+        $this->fileExporter->export($outputPath, $uniqueProducts);
     }
 }
