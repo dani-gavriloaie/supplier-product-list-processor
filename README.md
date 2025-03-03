@@ -52,3 +52,6 @@ When the above is run the parser should display row by row each product object r
 
 #### Bonus:
 - Add unit/integration tests.
+
+#### Running Tests:
+`php tests/runTests.php`
