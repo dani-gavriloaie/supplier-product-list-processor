@@ -3,6 +3,7 @@
 namespace DaniGavriloaie\SupplierProductListProcessor\Services;
 
 use DaniGavriloaie\SupplierProductListProcessor\Exceptions\RequiredFieldException;
+use DaniGavriloaie\SupplierProductListProcessor\Factories\FileExporterFactory;
 use DaniGavriloaie\SupplierProductListProcessor\Factories\FileParserFactory;
 use DaniGavriloaie\SupplierProductListProcessor\Models\Product;
 
@@ -12,14 +13,15 @@ class ProductProcessor
     public function process(string $filePath, string $outputPath): void
     {
         $fileParser = FileParserFactory::createParser($filePath);
-        $fileParser->parse($filePath);
 
         /** @var Product $product */
         $uniqueProducts = [];
         foreach ($fileParser->parse($filePath) as $product) {
+            echo json_encode($product) . "\r\n";
+
             $hash = md5($product->toString());
 
-            if (in_array($hash, $uniqueProducts)) {
+            if (isset($uniqueProducts[$hash])) {
                 $uniqueProducts[$hash]['count'] += 1;
             } else {
                 $uniqueProducts[$hash] = [
@@ -29,11 +31,7 @@ class ProductProcessor
             }
         }
 
-        foreach ($uniqueProducts as $productData) {
-            $product = $productData['product'];
-            echo $product->toString() . ' count: ' . $productData['count'];
-        }
-
-        echo memory_get_peak_usage();
+        $fileExporter = FileExporterFactory::createExporter($outputPath);
+        $fileExporter->export($outputPath, $uniqueProducts);
     }
 }
