@@ -5,6 +5,12 @@ use DaniGavriloaie\SupplierProductListProcessor\Services\ProductProcessor;
 
 require 'vendor/autoload.php';
 
+$options = getopt('', ['file:', 'unique-combinations:']);
+
+if (empty($options['file']) || empty($options['unique-combinations'])) {
+    die("Usage: php parser.php --file <file> --unique-combinations <output_file>\n");
+}
+
 $cliArgumentsParser = new CliArgumentParser($argv);
 $args = $cliArgumentsParser->getAll();
 
