@@ -4,7 +4,8 @@
     "type": "project",
     "autoload": {
         "psr-4": {
-            "DaniGavriloaie\\SupplierProductListProcessor\\": "src/"
+            "DaniGavriloaie\\SupplierProductListProcessor\\": "src/",
+            "DaniGavriloaie\\SupplierProductListProcessor\\Tests\\": "tests/"
         }
     },
     "authors": [
